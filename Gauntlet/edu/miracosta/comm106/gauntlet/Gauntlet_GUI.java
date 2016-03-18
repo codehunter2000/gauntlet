@@ -4,10 +4,9 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.io.Serializable;
 
-public class Gauntlet_GUI implements Serializable
+public class Gauntlet_GUI
 {
 	
-	private static final long serialVersionUID = -1093460117906105738L;
 	private static final int HEIGHT = 300;
 	private static final int WIDTH = 400;
 	private JMenuBar menuBar;
