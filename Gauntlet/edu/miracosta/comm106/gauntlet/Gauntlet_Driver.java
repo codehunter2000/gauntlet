@@ -4,6 +4,6 @@ public class Gauntlet_Driver
 {
 	public static void main(String[] args)
 	{
-		Gauntlet test = new Gauntlet();
+		Gauntlet_GUI test = new Gauntlet_GUI();
 	}
 }

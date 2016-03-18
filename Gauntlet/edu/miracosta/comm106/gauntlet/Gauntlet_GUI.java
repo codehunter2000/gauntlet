@@ -2,9 +2,12 @@ package edu.miracosta.comm106.gauntlet;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.Serializable;
 
-public class Gauntlet 
+public class Gauntlet_GUI implements Serializable
 {
+	
+	private static final long serialVersionUID = -1093460117906105738L;
 	private static final int HEIGHT = 300;
 	private static final int WIDTH = 400;
 	private JMenuBar menuBar;
@@ -15,7 +18,7 @@ public class Gauntlet
 	private JLabel imageLabel;
 	private ImageIcon eye = new ImageIcon("images/The-Illuminati-Eye.png");
 	
-	public Gauntlet()
+	public Gauntlet_GUI()
 	{
 		mainFrame = new JFrame("GAUNTLET");
 		mainFrame.setSize(WIDTH, HEIGHT);
@@ -35,8 +38,9 @@ public class Gauntlet
 	
 	public void buildMainPanel()
 	{
+		imageLabel = new JLabel(eye);
 		mainPanel = new JPanel();
-		mainPanel.add(new JLabel(eye));
+		mainPanel.add(imageLabel);
 	}
 	
 	private class exitButtonListener implements ActionListener
