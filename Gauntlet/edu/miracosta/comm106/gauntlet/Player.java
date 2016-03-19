@@ -1,6 +1,8 @@
 package edu.miracosta.comm106.gauntlet;
 
-public class Player 
+import java.io.Serializable;
+
+public class Player implements Serializable
 {
 	private String userName;
 	private int points;
