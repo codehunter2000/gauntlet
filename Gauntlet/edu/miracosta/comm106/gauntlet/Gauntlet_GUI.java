@@ -2,6 +2,8 @@ package edu.miracosta.comm106.gauntlet;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
+import java.awt.BorderLayout;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -16,39 +18,57 @@ public class Gauntlet_GUI
 	private JMenuItem exit;
 	private JFrame mainFrame;
 	private JPanel mainPanel;
-	private JLabel imageLabel;
-	private File illuminati;
+	private JLabel illuminatiImage,	brainImage, heartImage, muscleImage;
+	private File illuminati, brain, heart, muscle;
+	private BufferedImage eye, mental, emotional, physical;
 
 	
 	public Gauntlet_GUI()
 	{
 		
-		BufferedImage eye;
+		
 			// Will need to be changed for windows filepath
 		illuminati = new File("/home/gabriel/git/gauntlet/Gauntlet/edu/miracosta/comm106/gauntlet/images/The-Illuminati-Eye.png");
+			// brain image needs to be scaled down
+		brain = new File("/home/gabriel/git/gauntlet/Gauntlet/edu/miracosta/comm106/gauntlet/images/activebrain.jpg");
+		heart = new File("/home/gabriel/git/gauntlet/Gauntlet/edu/miracosta/comm106/gauntlet/images/Red-Heart.png");
+		muscle = new File("/home/gabriel/git/gauntlet/Gauntlet/edu/miracosta/comm106/gauntlet/images/muscle.jpg");
 		
-		if (illuminati.exists())
-			System.out.println("File exists");
 		if (!illuminati.exists())
-			System.out.println("DNE");
+			System.out.println("Illuminati DNE");
+		if (!brain.exists())
+			System.out.println("If I only had a brain!");
+		if (!heart.exists())
+			System.out.println("You sin in the name of rock 'n roll.");
+		if (!muscle.exists())
+			System.out.println("Weakling");
+		
 		
 		try 
 		{
 			eye = ImageIO.read(illuminati);
+			mental = ImageIO.read(brain);
+			physical = ImageIO.read(muscle);
+			emotional = ImageIO.read(heart);
 			mainFrame = new JFrame("GAUNTLET");
 			mainFrame.setSize(WIDTH, HEIGHT);
 			mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			imageLabel = new JLabel(new ImageIcon(eye));
-			mainFrame.add(imageLabel);
+			mainFrame.setLayout(new BorderLayout());
+			illuminatiImage = new JLabel(new ImageIcon(eye));
+			brainImage = new JLabel(new ImageIcon(mental));
+			heartImage = new JLabel(new ImageIcon(emotional));
+			muscleImage = new JLabel(new ImageIcon(physical));
+			mainFrame.add(illuminatiImage, BorderLayout.CENTER);
+			mainFrame.add(brainImage, BorderLayout.NORTH);
+			mainFrame.add(heartImage, BorderLayout.EAST);
+			mainFrame.add(muscleImage, BorderLayout.WEST);
 			mainFrame.setVisible(true);
 		} 
 		
 		catch (IOException e) 
 		{
 			System.out.println("Image Not Found.");
-		}
-		
-		
+		}		
 	}
 
 	
