@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Player implements Serializable
 {
+	private static final long serialVersionUID = 7794664838111510611L;
 	private String userName;
 	private int points;
 	
