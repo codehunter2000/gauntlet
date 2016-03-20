@@ -10,8 +10,10 @@ import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 public class Gauntlet_Cards implements Serializable
@@ -22,6 +24,7 @@ public class Gauntlet_Cards implements Serializable
 	private static final String emotionalPath = "cards/emotion.dat";
 	private static final String mentalPath = "cards/mental.dat";
 	private static final String challengePath = "cards/challenge.dat";
+	private int points;
 	private String catagory;
 	private String question;
 	private String answer;
@@ -32,6 +35,7 @@ public class Gauntlet_Cards implements Serializable
 	
 	public Gauntlet_Cards()
 	{
+		points = 0;
 		catagory = null;
 		question = null;
 		answer = null;
@@ -46,15 +50,17 @@ public class Gauntlet_Cards implements Serializable
 		challengeQ = new File(challengePath);
 	}
 	
-	public Gauntlet_Cards(String cat, String q, String answ)
+	public Gauntlet_Cards(String cat, String q, String answ, int points)
 	{
+		this.points = points;
 		catagory = cat;
 		question = q;
 		answer = answ;
 	}
 	
-	public Gauntlet_Cards(String chall)
+	public Gauntlet_Cards(String chall, int points)
 	{
+		this.points = points;
 		challenge = chall;
 	}
 	
@@ -357,27 +363,48 @@ public class Gauntlet_Cards implements Serializable
 		final String m = "Mental";
 		final String c = "Challenge";
 		final String[] choices = {p, e, m, c};
-		String question, answer, challenge;
+		String question, answer, challenge, points;
+		int totalPoints;
+		
 	    String input = (String) JOptionPane.showInputDialog(null, "Please select a category",
 	        "Create Card", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
 	    if (input == p || input == e || input == m)
 	    {
 	    	question = JOptionPane.showInputDialog("Please enter the question");
 	    	answer = JOptionPane.showInputDialog("Please enter the answer");
-	    	Gauntlet_Cards newCard = new Gauntlet_Cards(input, question, answer);
-	    	if (input == p)
-	    		physicalCards.add(newCard);
-	    	if (input == e)
-	    		emotionalCards.add(newCard);
-	    	if (input == m)
-	    		mentalCards.add(newCard);
+	    	points = JOptionPane.showInputDialog("Please enter the amount of points for this cards");
+	    	try
+	    	{
+	    		totalPoints = Integer.parseInt(points);
+	    		Gauntlet_Cards newCard = new Gauntlet_Cards(input, question, answer, totalPoints);
+		    	if (input == p)
+		    		physicalCards.add(newCard);
+		    	if (input == e)
+		    		emotionalCards.add(newCard);
+		    	if (input == m)
+		    		mentalCards.add(newCard);
+	    	}
+	    	catch (NumberFormatException x)
+	    	{
+	    		JOptionPane.showMessageDialog(panel, "Number must be an integer!", "Error", JOptionPane.ERROR_MESSAGE);
+	    	}
 	    }
 	    
 	    if (input == c)
 	    {
 	    	challenge = JOptionPane.showInputDialog("Please enter the challenge");
-	    	Gauntlet_Cards newCard = new Gauntlet_Cards(challenge);
-	    	challengeCards.add(newCard);
+	    	
+	    	try
+	    	{
+	    		points = JOptionPane.showInputDialog("Please enter the points for this card.");
+	    		totalPoints = Integer.parseInt(points);
+	    		Gauntlet_Cards newCard = new Gauntlet_Cards(challenge, totalPoints);
+	    		challengeCards.add(newCard);
+	    	}
+	    	catch (NumberFormatException y)
+	    	{
+	    		JOptionPane.showMessageDialog(panel, "Number must be an integer!", "Error", JOptionPane.ERROR_MESSAGE);
+	    	}
 	    }
 	}
 	
@@ -391,12 +418,164 @@ public class Gauntlet_Cards implements Serializable
 		
 		if (exists == false)
 			createDataFiles();
-		if (physicalQ.isFile() == true && physicalEmpty == false)
+		if (physicalQ.isFile() && physicalEmpty == false)
 		{
+			try
+			{
+				AppendObjectOutputStream appendPhysical = new AppendObjectOutputStream(new FileOutputStream(physicalQ, true));
+				for (Gauntlet_Cards gauntlet_Cards : physicalCards) 
+				{
+					appendPhysical.writeObject(gauntlet_Cards);
+				}
+				appendPhysical.close();
+			}
 			
+			catch (IOException e)
+			{
+				JOptionPane.showMessageDialog(panel, "Problem with file!", "Error", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 		
+		else if (physicalQ.isFile() && physicalEmpty == true)
+		{
+			try
+			{
+				ObjectOutputStream physical = new ObjectOutputStream(new FileOutputStream(physicalQ));
+				for (Gauntlet_Cards gauntlet_Cards : physicalCards) 
+				{
+					physical.writeObject(gauntlet_Cards);
+				}
+				physical.close();
+			}
+			
+			catch (IOException e)
+			{
+				JOptionPane.showMessageDialog(panel, "Problem with file!", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
 		
+		if (emotionalQ.isFile() && emotionalEmpty == false)
+		{
+			try
+			{
+				AppendObjectOutputStream appendEmotional = new AppendObjectOutputStream(new FileOutputStream(emotionalQ, true));
+				for (Gauntlet_Cards gauntlet_Cards : emotionalCards) 
+				{
+					appendEmotional.writeObject(gauntlet_Cards);
+				}
+				appendEmotional.close();
+			}
+			
+			catch (IOException e)
+			{
+				JOptionPane.showMessageDialog(panel, "Problem with file!", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+		
+		else if (emotionalQ.isFile() && emotionalEmpty == true)
+		{
+			try 
+			{
+				ObjectOutputStream emotional = new ObjectOutputStream(new FileOutputStream(emotionalQ));
+				for (Gauntlet_Cards gauntlet_Cards : emotionalCards) 
+				{
+					emotional.writeObject(gauntlet_Cards);
+				}
+				emotional.close();
+			} 
+			catch (FileNotFoundException e) 
+			{
+				JOptionPane.showMessageDialog(panel, "Problem with file!", "Error", JOptionPane.ERROR_MESSAGE);
+				
+			} 
+			catch (IOException e) 
+			{
+				JOptionPane.showMessageDialog(panel, "Problem with file!", "Error", JOptionPane.ERROR_MESSAGE);
+				
+			}
+		}
+		
+		if (mentalQ.isFile() && mentalEmpty == false)
+		{
+			try
+			{
+				AppendObjectOutputStream appendMental = new AppendObjectOutputStream(new FileOutputStream(mentalQ, true));
+				for (Gauntlet_Cards gauntlet_Cards : mentalCards) 
+				{
+					appendMental.writeObject(gauntlet_Cards);
+				}
+				appendMental.close();
+			}
+			
+			catch (IOException e)
+			{
+				JOptionPane.showMessageDialog(panel, "Problem with file!", "Error", JOptionPane.ERROR_MESSAGE);
+				
+			}
+		}
+		
+		else if (mentalQ.isFile() && mentalEmpty == true)
+		{
+			try
+			{
+				ObjectOutputStream mental = new ObjectOutputStream(new FileOutputStream(mentalQ));
+				for (Gauntlet_Cards gauntlet_Cards : mentalCards) 
+				{
+					mental.writeObject(gauntlet_Cards);
+				}
+				mental.close();
+			}
+			
+			catch (IOException e)
+			{
+				JOptionPane.showMessageDialog(panel, "Problem with file!", "Error", JOptionPane.ERROR_MESSAGE);
+				
+			}
+		}
+		
+		if (challengeQ.isFile() && challengeEmpty == false)
+		{
+			try
+			{
+				AppendObjectOutputStream appendChallenge = new AppendObjectOutputStream(new FileOutputStream(challengeQ, true));
+				for (Gauntlet_Cards gauntlet_Cards : challengeCards) 
+				{
+					appendChallenge.writeObject(gauntlet_Cards);
+				}
+				appendChallenge.close();
+			}
+			
+			catch (IOException e)
+			{
+				JOptionPane.showMessageDialog(panel, "Problem with file!", "Error", JOptionPane.ERROR_MESSAGE);
+				
+			}
+		}
+		
+		else if (challengeQ.isFile() && challengeEmpty == true)
+		{
+			try
+			{
+				ObjectOutputStream challenge = new ObjectOutputStream(new FileOutputStream(challengeQ));
+				for (Gauntlet_Cards gauntlet_Cards : challengeCards) 
+				{
+					challenge.writeObject(gauntlet_Cards);
+				}
+				challenge.close();
+			}
+			
+			catch (IOException e)
+			{
+				JOptionPane.showMessageDialog(panel, "Problem with file!", "Error", JOptionPane.ERROR_MESSAGE);
+				
+			}
+		}
+	}
+	
+	
+	public int getPoints()
+	{
+		return points;
 	}
 	
 	public String getCatagory()
@@ -417,6 +596,11 @@ public class Gauntlet_Cards implements Serializable
 	public String getChallenge()
 	{
 		return challenge;
+	}
+	
+	public void setPoints(int points)
+	{
+		this.points = points;
 	}
 	
 	public void setCatagory(String cat)
