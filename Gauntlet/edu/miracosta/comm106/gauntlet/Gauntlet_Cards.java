@@ -27,6 +27,7 @@ public class Gauntlet_Cards implements Serializable
 	private String answer;
 	private String challenge;
 	private File physicalQ, emotionalQ, mentalQ, challengeQ;
+	private JPanel panel = new JPanel();
 	private LinkedList<Gauntlet_Cards> physicalCards, emotionalCards, mentalCards, challengeCards;
 	
 	public Gauntlet_Cards()
@@ -171,12 +172,30 @@ public class Gauntlet_Cards implements Serializable
 		return empty;
 	}
 	
+	public boolean checkIfEmpty(File dataFile)
+	{
+		boolean isEmpty = false;
+		try 
+		{
+			Scanner check = new Scanner(dataFile);
+			if (!check.hasNextLine())
+				isEmpty = true;
+			check.close();
+		} 
+		
+		catch (FileNotFoundException e) 
+		{
+			JOptionPane.showMessageDialog(panel, "File not found!", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+		
+		return isEmpty;
+	}
+	
 	public void generateCards()
 	{
 		final boolean checkFilesExist = checkIfFilesExist();
 		final boolean checkIfEmpty = checkIfFilesAreEmpty();
 		boolean eof = false;
-		final JPanel panel = new JPanel();
 		if (checkFilesExist == false)
 			createDataFiles();
 		if (checkIfEmpty == true)
@@ -361,8 +380,24 @@ public class Gauntlet_Cards implements Serializable
 	    	challengeCards.add(newCard);
 	    }
 	}
-
-
+	
+	public void saveCards()
+	{
+		boolean exists = checkIfFilesExist();
+		boolean physicalEmpty = checkIfEmpty(physicalQ);
+		boolean emotionalEmpty = checkIfEmpty(emotionalQ);
+		boolean mentalEmpty = checkIfEmpty(mentalQ);
+		boolean challengeEmpty = checkIfEmpty(challengeQ);
+		
+		if (exists == false)
+			createDataFiles();
+		if (physicalQ.isFile() == true && physicalEmpty == false)
+		{
+			
+		}
+		
+		
+	}
 	
 	public String getCatagory()
 	{
@@ -404,3 +439,5 @@ public class Gauntlet_Cards implements Serializable
 		challenge = chall;
 	}
 }
+
+
