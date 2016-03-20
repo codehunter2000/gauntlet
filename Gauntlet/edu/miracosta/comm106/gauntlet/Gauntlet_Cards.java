@@ -2,34 +2,45 @@ package edu.miracosta.comm106.gauntlet;
 
 import java.util.LinkedList;
 import java.util.Scanner;
+
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+import java.io.EOFException;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 
 public class Gauntlet_Cards implements Serializable
 {
 	
 	private static final long serialVersionUID = -1252346999228244761L;
+	private static final String physicalPath = "cards/physical.dat";
+	private static final String emotionalPath = "cards/emotion.dat";
+	private static final String mentalPath = "cards/mental.dat";
+	private static final String challengePath = "Cards/challenge.dat";
 	private String catagory;
 	private String question;
 	private String answer;
 	private File physicalQ, emotionalQ, mentalQ, challengeQ;
-	private LinkedList<Gauntlet_Cards> physical, emotional, mental, challenge;
+	private LinkedList<Gauntlet_Cards> physicalCards, emotionalCards, mentalCards, challengeCards;
 	
 	public Gauntlet_Cards()
 	{
 		catagory = null;
 		question = null;
 		answer = null;
-		physical = new LinkedList<>();
-		emotional = new LinkedList<>();
-		mental = new LinkedList<>();
-		challenge = new LinkedList<>();
-		physicalQ = new File("cards/physical.dat");
-		emotionalQ = new File("cards/emotional.dat");
-		mentalQ = new File("cards/mental.dat");
-		challengeQ = new File("cards/challenge.dat");
+		physicalCards = new LinkedList<>();
+		emotionalCards = new LinkedList<>();
+		mentalCards = new LinkedList<>();
+		challengeCards = new LinkedList<>();
+		physicalQ = new File(physicalPath);
+		emotionalQ = new File(emotionalPath);
+		mentalQ = new File(mentalPath);
+		challengeQ = new File(challengePath);
 	}
 	
 	public Gauntlet_Cards(String cat, String q, String answ)
@@ -120,7 +131,7 @@ public class Gauntlet_Cards implements Serializable
 	
 	public boolean checkIfFilesAreEmpty()
 	{
-		boolean empty = true;
+		boolean empty = false;
 		int total = 0;
 		
 		try 
@@ -155,12 +166,57 @@ public class Gauntlet_Cards implements Serializable
 	
 	public void createCards()
 	{
-		
+		final boolean checkFilesExist = checkIfFilesExist();
+		final boolean checkIfEmpty = checkIfFilesAreEmpty();
+		boolean eof = false;
+		final JPanel panel = new JPanel();
+		if (checkFilesExist == false)
+			createDataFiles();
+		if (checkIfEmpty == true)
+			JOptionPane.showMessageDialog(panel, "Some of the files are empty! Please fill them."
+					, "Error", JOptionPane.ERROR_MESSAGE);
+		try
+		{
+			ObjectInputStream physical = new ObjectInputStream(new FileInputStream(physicalPath));
+			ObjectInputStream emotional = new ObjectInputStream(new FileInputStream(emotionalPath));
+			ObjectInputStream mental = new ObjectInputStream(new FileInputStream(mentalPath));
+			ObjectInputStream challenge = new ObjectInputStream(new FileInputStream(challengePath));
+			
+			try
+			{
+				while (!eof)
+				{
+					try 
+					{
+						Gauntlet_Cards element = (Gauntlet_Cards) physical.readObject();
+						String type = element.catagory;
+						type = type.trim();
+						if (type.equalsIgnoreCase("physical"))
+							physicalCards.add(element);
+						if (type.equalsIgnoreCase("emotional"))
+							emotionalCards.add(element);
+						if (type.equalsIgnoreCase("mental"))
+							mentalCards.add(element);
+						if (type.equalsIgnoreCase("challenge"))
+							challengeCards.add(element);
+					} 
+					catch (EOFException e)
+					{
+						eof = true;
+					}
+					
+					catch (ClassNotFoundException e) 
+					{
+						JOptionPane.showMessageDialog(panel, "Problem reading file!", "Error", JOptionPane.ERROR_MESSAGE);
+						
+					}
+					
+				}
+			}
+		}
 	}
-	
-	
-	
-	
+
+
 	
 	public String getCatagory()
 	{
