@@ -164,7 +164,7 @@ public class Gauntlet_Cards implements Serializable
 		return empty;
 	}
 	
-	public void createCards()
+	public void generateCards()
 	{
 		final boolean checkFilesExist = checkIfFilesExist();
 		final boolean checkIfEmpty = checkIfFilesAreEmpty();
