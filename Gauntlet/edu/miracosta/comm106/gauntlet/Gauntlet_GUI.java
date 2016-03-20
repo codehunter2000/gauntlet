@@ -14,7 +14,7 @@ public class Gauntlet_GUI
 	private static final int HEIGHT = 300;
 	private static final int WIDTH = 400;
 	private JMenuBar menuBar;
-	private JMenu close;
+	private JMenu menu;
 	private JMenuItem exit;
 	private JFrame mainFrame;
 	private JPanel mainPanel;
@@ -54,14 +54,24 @@ public class Gauntlet_GUI
 			mainFrame.setSize(WIDTH, HEIGHT);
 			mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			mainFrame.setLayout(new BorderLayout());
+			mainPanel = new JPanel();
+			menuBar = new JMenuBar();
+			menu = new JMenu("Menu");
+			exit = new JMenuItem("Exit");
+			exit.addActionListener(new exitButtonListener());
+			menu.add(exit);
+			menuBar.add(menu);
+			mainFrame.add(menuBar);
+			
 			illuminatiImage = new JLabel(new ImageIcon(eye));
 			brainImage = new JLabel(new ImageIcon(mental));
 			heartImage = new JLabel(new ImageIcon(emotional));
 			muscleImage = new JLabel(new ImageIcon(physical));
-			mainFrame.add(illuminatiImage, BorderLayout.CENTER);
-			mainFrame.add(brainImage, BorderLayout.NORTH);
-			mainFrame.add(heartImage, BorderLayout.EAST);
-			mainFrame.add(muscleImage, BorderLayout.WEST);
+			mainPanel.add(illuminatiImage, BorderLayout.CENTER);
+			mainPanel.add(brainImage, BorderLayout.NORTH);
+			mainPanel.add(heartImage, BorderLayout.EAST);
+			mainPanel.add(muscleImage, BorderLayout.WEST);
+			mainFrame.add(mainPanel);
 			mainFrame.setVisible(true);
 		} 
 		
