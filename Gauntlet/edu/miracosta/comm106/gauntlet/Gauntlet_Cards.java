@@ -1,7 +1,9 @@
 package edu.miracosta.comm106.gauntlet;
 
 import java.util.LinkedList;
+import java.util.Scanner;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -121,7 +123,39 @@ public class Gauntlet_Cards implements Serializable
 		boolean empty = true;
 		int total = 0;
 		
+		try 
+		{
+			Scanner checkP = new Scanner(physicalQ);
+			Scanner checkE = new Scanner(emotionalQ);
+			Scanner checkM = new Scanner(mentalQ);
+			Scanner checkC = new Scanner(challengeQ);
+			if (!checkP.hasNextLine())
+				total++;
+			if (!checkE.hasNextLine())
+				total++;
+			if (!checkM.hasNextLine())
+				total++;
+			if (!checkC.hasNextLine())
+				total++;
+			if (total != 0)
+				empty = true;
+			checkP.close();
+			checkE.close();
+			checkM.close();
+			checkC.close();
+			
+		} 
+		catch (FileNotFoundException e) 
+		{
+			System.out.println("File Not Found");
+		}
+		
 		return empty;
+	}
+	
+	public void createCards()
+	{
+		
 	}
 	
 	
