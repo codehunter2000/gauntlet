@@ -181,7 +181,7 @@ public class Gauntlet_Cards implements Serializable
 			ObjectInputStream emotional = new ObjectInputStream(new FileInputStream(emotionalPath));
 			ObjectInputStream mental = new ObjectInputStream(new FileInputStream(mentalPath));
 			ObjectInputStream challenge = new ObjectInputStream(new FileInputStream(challengePath));
-			
+
 			try
 			{
 				while (!eof)
@@ -189,30 +189,138 @@ public class Gauntlet_Cards implements Serializable
 					try 
 					{
 						Gauntlet_Cards element = (Gauntlet_Cards) physical.readObject();
-						String type = element.catagory;
-						type = type.trim();
-						if (type.equalsIgnoreCase("physical"))
-							physicalCards.add(element);
-						if (type.equalsIgnoreCase("emotional"))
-							emotionalCards.add(element);
-						if (type.equalsIgnoreCase("mental"))
-							mentalCards.add(element);
-						if (type.equalsIgnoreCase("challenge"))
-							challengeCards.add(element);
-					} 
+						physicalCards.add(element);
+					}
 					catch (EOFException e)
 					{
 						eof = true;
 					}
-					
 					catch (ClassNotFoundException e) 
 					{
 						JOptionPane.showMessageDialog(panel, "Problem reading file!", "Error", JOptionPane.ERROR_MESSAGE);
-						
+
+					}
+					catch (FileNotFoundException e)
+					{
+						JOptionPane.showMessageDialog(panel, "File not found!", "Error", JOptionPane.ERROR_MESSAGE);
+
+					}
+					catch (IOException e)
+					{
+						JOptionPane.showMessageDialog(panel, "Problem reading file!", "Error", JOptionPane.ERROR_MESSAGE);
+
+					}
+				}
+				
+				physical.close();
+				eof = false;
+				
+				while (!eof)
+				{
+					try 
+					{
+						Gauntlet_Cards element = (Gauntlet_Cards) emotional.readObject();
+						emotionalCards.add(element);
+					}
+					catch (EOFException e)
+					{
+						eof = true;
+					}
+					catch (ClassNotFoundException e) 
+					{
+						JOptionPane.showMessageDialog(panel, "Problem reading file!", "Error", JOptionPane.ERROR_MESSAGE);
+
+					}
+					catch (FileNotFoundException e)
+					{
+						JOptionPane.showMessageDialog(panel, "File not found!", "Error", JOptionPane.ERROR_MESSAGE);
+
+					}
+					catch (IOException e)
+					{
+						JOptionPane.showMessageDialog(panel, "Problem reading file!", "Error", JOptionPane.ERROR_MESSAGE);
+
 					}
 					
+					
 				}
+				
+				emotional.close();
+				eof = false;
+				
+				while (!eof)
+				{
+					try 
+					{
+						Gauntlet_Cards element = (Gauntlet_Cards) mental.readObject();
+						mentalCards.add(element);
+					}
+					catch (EOFException e)
+					{
+						eof = true;
+					}
+					catch (ClassNotFoundException e) 
+					{
+						JOptionPane.showMessageDialog(panel, "Problem reading file!", "Error", JOptionPane.ERROR_MESSAGE);
+
+					}
+					catch (FileNotFoundException e)
+					{
+						JOptionPane.showMessageDialog(panel, "File not found!", "Error", JOptionPane.ERROR_MESSAGE);
+
+					}
+					catch (IOException e)
+					{
+						JOptionPane.showMessageDialog(panel, "Problem reading file!", "Error", JOptionPane.ERROR_MESSAGE);
+
+					}
+				}
+				
+				mental.close();
+				eof = false;
+				
+				while (!eof)
+				{
+					try 
+					{
+						Gauntlet_Cards element = (Gauntlet_Cards) challenge.readObject();
+						challengeCards.add(element);
+					}
+					catch (EOFException e)
+					{
+						eof = true;
+					}
+					catch (ClassNotFoundException e) 
+					{
+						JOptionPane.showMessageDialog(panel, "Problem reading file!", "Error", JOptionPane.ERROR_MESSAGE);
+
+					}
+					catch (FileNotFoundException e)
+					{
+						JOptionPane.showMessageDialog(panel, "File not found!", "Error", JOptionPane.ERROR_MESSAGE);
+
+					}
+					catch (IOException e)
+					{
+						JOptionPane.showMessageDialog(panel, "Problem reading file!", "Error", JOptionPane.ERROR_MESSAGE);
+
+					}
+				}
+				challenge.close();
 			}
+			catch (Exception e)
+			{
+				JOptionPane.showMessageDialog(panel, "Problem with file!", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+			
+		}
+		catch (FileNotFoundException e)
+		{
+			JOptionPane.showMessageDialog(panel, "File not found!", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+		catch (IOException e)
+		{
+			JOptionPane.showMessageDialog(panel, "Problem with file!", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
