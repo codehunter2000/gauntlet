@@ -25,6 +25,7 @@ public class Gauntlet_Cards implements Serializable
 	private String catagory;
 	private String question;
 	private String answer;
+	private String challenge;
 	private File physicalQ, emotionalQ, mentalQ, challengeQ;
 	private LinkedList<Gauntlet_Cards> physicalCards, emotionalCards, mentalCards, challengeCards;
 	
@@ -33,6 +34,7 @@ public class Gauntlet_Cards implements Serializable
 		catagory = null;
 		question = null;
 		answer = null;
+		challenge = null;
 		physicalCards = new LinkedList<>();
 		emotionalCards = new LinkedList<>();
 		mentalCards = new LinkedList<>();
@@ -48,6 +50,11 @@ public class Gauntlet_Cards implements Serializable
 		catagory = cat;
 		question = q;
 		answer = answ;
+	}
+	
+	public Gauntlet_Cards(String chall)
+	{
+		challenge = chall;
 	}
 	
 	public boolean checkIfFilesExist()
@@ -323,6 +330,37 @@ public class Gauntlet_Cards implements Serializable
 			JOptionPane.showMessageDialog(panel, "Problem with file!", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
+	
+	public void createCards()
+	{
+		final String p = "Physical";
+		final String e = "Emotional";
+		final String m = "Mental";
+		final String c = "Challenge";
+		final String[] choices = {p, e, m, c};
+		String question, answer, challenge;
+	    String input = (String) JOptionPane.showInputDialog(null, "Please select a category",
+	        "Create Card", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
+	    if (input == p || input == e || input == m)
+	    {
+	    	question = JOptionPane.showInputDialog("Please enter the question");
+	    	answer = JOptionPane.showInputDialog("Please enter the answer");
+	    	Gauntlet_Cards newCard = new Gauntlet_Cards(input, question, answer);
+	    	if (input == p)
+	    		physicalCards.add(newCard);
+	    	if (input == e)
+	    		emotionalCards.add(newCard);
+	    	if (input == m)
+	    		mentalCards.add(newCard);
+	    }
+	    
+	    if (input == c)
+	    {
+	    	challenge = JOptionPane.showInputDialog("Please enter the challenge");
+	    	Gauntlet_Cards newCard = new Gauntlet_Cards(challenge);
+	    	challengeCards.add(newCard);
+	    }
+	}
 
 
 	
@@ -341,6 +379,11 @@ public class Gauntlet_Cards implements Serializable
 		return answer;
 	}
 	
+	public String getChallenge()
+	{
+		return challenge;
+	}
+	
 	public void setCatagory(String cat)
 	{
 		catagory = cat;
@@ -354,5 +397,10 @@ public class Gauntlet_Cards implements Serializable
 	public void setAnswer(String answ)
 	{
 		answer = answ;
+	}
+	
+	public void setChallenge(String chall)
+	{
+		challenge = chall;
 	}
 }
