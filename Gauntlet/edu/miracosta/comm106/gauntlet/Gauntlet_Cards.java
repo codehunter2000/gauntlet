@@ -21,7 +21,7 @@ public class Gauntlet_Cards implements Serializable
 	private static final String physicalPath = "cards/physical.dat";
 	private static final String emotionalPath = "cards/emotion.dat";
 	private static final String mentalPath = "cards/mental.dat";
-	private static final String challengePath = "Cards/challenge.dat";
+	private static final String challengePath = "cards/challenge.dat";
 	private String catagory;
 	private String question;
 	private String answer;
