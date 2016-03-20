@@ -25,14 +25,10 @@ public class Gauntlet_GUI
 	
 	public Gauntlet_GUI()
 	{
-		
-		
-			// Will need to be changed for windows filepath
-		illuminati = new File("/home/gabriel/git/gauntlet/Gauntlet/edu/miracosta/comm106/gauntlet/images/The-Illuminati-Eye.png");
-			// brain image needs to be scaled down
-		brain = new File("/home/gabriel/git/gauntlet/Gauntlet/edu/miracosta/comm106/gauntlet/images/activebrain.jpg");
-		heart = new File("/home/gabriel/git/gauntlet/Gauntlet/edu/miracosta/comm106/gauntlet/images/Red-Heart.png");
-		muscle = new File("/home/gabriel/git/gauntlet/Gauntlet/edu/miracosta/comm106/gauntlet/images/muscle.jpg");
+		illuminati = new File("Gauntlet/edu/miracosta/comm106/gauntlet/images/The-Illuminati-Eye.png");
+		brain = new File("Gauntlet/edu/miracosta/comm106/gauntlet/images/activebrain.jpg");
+		heart = new File("Gauntlet/edu/miracosta/comm106/gauntlet/images/Red-Heart.png");
+		muscle = new File("Gauntlet/edu/miracosta/comm106/gauntlet/images/muscle.jpg");
 		
 		if (!illuminati.exists())
 			System.out.println("Illuminati DNE");
