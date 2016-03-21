@@ -1,6 +1,7 @@
 package edu.miracosta.comm106.gauntlet;
 
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.Scanner;
 
 import javax.swing.JOptionPane;
@@ -570,6 +571,42 @@ public class Gauntlet_Cards implements Serializable
 				
 			}
 		}
+	}
+	
+	public Gauntlet_Cards getPhysicalCard()
+	{
+		Gauntlet_Cards card = null;
+		Random randomCard = new Random();
+		int index = randomCard.nextInt(physicalCards.size());
+		card = physicalCards.get(index);		
+		return card;
+	}
+	
+	public Gauntlet_Cards getEmotionalCard()
+	{
+		Gauntlet_Cards card = null;
+		Random randomCard = new Random();
+		int index = randomCard.nextInt(emotionalCards.size());
+		card = physicalCards.get(index);
+		return card;
+	}
+	
+	public Gauntlet_Cards getMentalCard()
+	{
+		Gauntlet_Cards card = null;
+		Random randomCard = new Random();
+		int index = randomCard.nextInt(mentalCards.size());
+		card = mentalCards.get(index);
+		return card;
+	}
+	
+	public Gauntlet_Cards getChallengeCard()
+	{
+		Gauntlet_Cards card = null;
+		Random randomCard = new Random();
+		int index = randomCard.nextInt(challengeCards.size());
+		card = challengeCards.get(index);
+		return card;
 	}
 	
 	
