@@ -21,10 +21,10 @@ public class Gauntlet_Cards implements Serializable
 {
 	
 	private static final long serialVersionUID = -1252346999228244761L;
-	private static final String physicalPath = "cards/physical.dat";
-	private static final String emotionalPath = "cards/emotion.dat";
-	private static final String mentalPath = "cards/mental.dat";
-	private static final String challengePath = "cards/challenge.dat";
+	private static final String physicalPath = "Gauntlet/edu/miracosta/comm106/gauntlet/cards/physical.dat";
+	private static final String emotionalPath = "Gauntlet/edu/miracosta/comm106/gauntlet/cards/emotion.dat";
+	private static final String mentalPath = "Gauntlet/edu/miracosta/comm106/gauntlet/cards/mental.dat";
+	private static final String challengePath = "Gauntlet/edu/miracosta/comm106/gauntlet/cards/challenge.dat";
 	private int points;
 	private String catagory;
 	private String question;
@@ -192,7 +192,7 @@ public class Gauntlet_Cards implements Serializable
 		
 		catch (FileNotFoundException e) 
 		{
-			JOptionPane.showMessageDialog(panel, "File not found!", "Error", JOptionPane.ERROR_MESSAGE);
+		
 		}
 		
 		return isEmpty;
@@ -364,12 +364,12 @@ public class Gauntlet_Cards implements Serializable
 		final String m = "Mental";
 		final String c = "Challenge";
 		final String[] choices = {p, e, m, c};
-		String question, answer, challenge, points;
+		String question, answer, challenge, points, strength;
 		int totalPoints;
 		
 	    String input = (String) JOptionPane.showInputDialog(null, "Please select a category",
 	        "Create Card", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
-	    if (input == p || input == e || input == m)
+	    if (input == e || input == m)
 	    {
 	    	question = JOptionPane.showInputDialog("Please enter the question");
 	    	answer = JOptionPane.showInputDialog("Please enter the answer");
@@ -407,6 +407,8 @@ public class Gauntlet_Cards implements Serializable
 	    		JOptionPane.showMessageDialog(panel, "Number must be an integer!", "Error", JOptionPane.ERROR_MESSAGE);
 	    	}
 	    }
+	    
+	    saveCards();
 	}
 	
 	public void saveCards()
