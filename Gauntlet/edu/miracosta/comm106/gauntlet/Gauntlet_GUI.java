@@ -18,6 +18,7 @@ public class Gauntlet_GUI
 	private static final int EMOTIONAL  = 1;
 	private static final int MENTAL = 2;
 	private static final int CHALLENGE = 3;
+	private Gauntlet_Cards launch;
 	private JMenuBar menuBar;
 	private JMenu menu;
 	private JMenuItem exit, addCards;
@@ -48,7 +49,7 @@ public class Gauntlet_GUI
 		
 		try 
 		{
-			Gauntlet_Cards launch = new Gauntlet_Cards();
+			launch = new Gauntlet_Cards();
 			launch.startUp();
 			eye = ImageIO.read(illuminati);
 			mental = ImageIO.read(brain);
@@ -93,32 +94,28 @@ public class Gauntlet_GUI
 	
 	public void getPhysicalCard()
 	{
-		Gauntlet_Cards physical = new Gauntlet_Cards();
-		Gauntlet_Cards card = physical.getPhysicalCard();
+		Gauntlet_Cards card = launch.getPhysicalCard();
 		JOptionPane.showMessageDialog(null, card.getChallenge() + "\n" + 
 				card.getPoints() + " points");
 	}
 	
 	public void getEmotionalCard()
 	{
-		Gauntlet_Cards emotional = new Gauntlet_Cards();
-		Gauntlet_Cards card = emotional.getEmotionalCard();
+		Gauntlet_Cards card = launch.getEmotionalCard();
 		JOptionPane.showMessageDialog(null, card.getChallenge() + "\n" +
 				card.getPoints() + " points");
 	}
 	
 	public void getMentalCard()
 	{
-		Gauntlet_Cards mental = new Gauntlet_Cards();
-		Gauntlet_Cards card = mental.getMentalCard();
+		Gauntlet_Cards card = launch.getMentalCard();
 		JOptionPane.showMessageDialog(null, card.getChallenge() + "\n" +
 				card.getPoints() + " points");
 	}
 	
 	public void getChallengeCard()
 	{
-		Gauntlet_Cards challenge = new Gauntlet_Cards();
-		Gauntlet_Cards card = challenge.getChallengeCard();
+		Gauntlet_Cards card = launch.getChallengeCard();
 		JOptionPane.showMessageDialog(null, card.getChallenge() + "\n" +
 				card.getPoints() + " points");
 	}
