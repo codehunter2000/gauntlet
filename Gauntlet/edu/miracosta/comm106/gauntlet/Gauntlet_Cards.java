@@ -30,9 +30,9 @@ public class Gauntlet_Cards implements Serializable
 	private String question;
 	private String answer;
 	private String challenge;
-	private File physicalQ, emotionalQ, mentalQ, challengeQ;
+	private static File physicalQ, emotionalQ, mentalQ, challengeQ;
 	private JPanel panel = new JPanel();
-	private LinkedList<Gauntlet_Cards> physicalCards, emotionalCards, mentalCards, challengeCards;
+	private static LinkedList<Gauntlet_Cards> physicalCards, emotionalCards, mentalCards, challengeCards;
 	
 	public Gauntlet_Cards()
 	{
@@ -63,6 +63,27 @@ public class Gauntlet_Cards implements Serializable
 	{
 		this.points = points;
 		challenge = chall;
+	}
+	
+	public void startUp()
+	{
+		boolean filesExist = checkIfFilesExist();
+		if (filesExist == false)
+			createDataFiles();
+		generateCards();
+		if (physicalCards.isEmpty())
+			JOptionPane.showMessageDialog(panel, "No physical cards!", "Error", 
+					JOptionPane.ERROR_MESSAGE);
+		if (emotionalCards.isEmpty())
+			JOptionPane.showMessageDialog(panel, "No emotional cards!", "Error", 
+					JOptionPane.ERROR_MESSAGE);
+		if (mentalCards.isEmpty())
+			JOptionPane.showMessageDialog(panel, "No mental cards!", "Error", 
+					JOptionPane.ERROR_MESSAGE);
+		if (challengeCards.isEmpty())
+			JOptionPane.showMessageDialog(panel, "No challenge cards!" , "Error", 
+					JOptionPane.ERROR_MESSAGE);
+		
 	}
 	
 	public boolean checkIfFilesExist()
@@ -369,7 +390,7 @@ public class Gauntlet_Cards implements Serializable
 		
 	    String input = (String) JOptionPane.showInputDialog(null, "Please select a category",
 	        "Create Card", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
-	    if (input == e || input == m)
+	    if (input == m)
 	    {
 	    	question = JOptionPane.showInputDialog("Please enter the question");
 	    	answer = JOptionPane.showInputDialog("Please enter the answer");
@@ -378,12 +399,7 @@ public class Gauntlet_Cards implements Serializable
 	    	{
 	    		totalPoints = Integer.parseInt(points);
 	    		Gauntlet_Cards newCard = new Gauntlet_Cards(input, question, answer, totalPoints);
-		    	if (input == p)
-		    		physicalCards.add(newCard);
-		    	if (input == e)
-		    		emotionalCards.add(newCard);
-		    	if (input == m)
-		    		mentalCards.add(newCard);
+		    	mentalCards.add(newCard);
 	    	}
 	    	catch (NumberFormatException x)
 	    	{
@@ -391,7 +407,7 @@ public class Gauntlet_Cards implements Serializable
 	    	}
 	    }
 	    
-	    if (input == c)
+	    if (input == c || input == e)
 	    {
 	    	challenge = JOptionPane.showInputDialog("Please enter the challenge");
 	    	
@@ -400,13 +416,38 @@ public class Gauntlet_Cards implements Serializable
 	    		points = JOptionPane.showInputDialog("Please enter the points for this card.");
 	    		totalPoints = Integer.parseInt(points);
 	    		Gauntlet_Cards newCard = new Gauntlet_Cards(challenge, totalPoints);
-	    		challengeCards.add(newCard);
+	    		if (input == c)
+	    			challengeCards.add(newCard);
+	    		else if (input == e)
+	    			emotionalCards.add(newCard);
+	    		
 	    	}
 	    	catch (NumberFormatException y)
 	    	{
 	    		JOptionPane.showMessageDialog(panel, "Number must be an integer!", "Error", JOptionPane.ERROR_MESSAGE);
 	    	}
 	    }
+	    
+	    if (input == p)
+	    {
+	    	strength = JOptionPane.showInputDialog("Please enter the physical challenge");
+	    	points = JOptionPane.showInputDialog("Please enter the number of points for this challenge");
+	    	
+	    	try 
+	    	{
+	    		totalPoints = Integer.parseInt(points);
+	    		Gauntlet_Cards newCard = new Gauntlet_Cards(strength, totalPoints);
+	    		physicalCards.add(newCard);
+	    	}
+	    	
+	    	catch (NumberFormatException steve)
+	    	{
+	    		JOptionPane.showMessageDialog(panel, "Number must be an integer!", "Error", JOptionPane.ERROR_MESSAGE);
+	    	}
+	    }
+	    JOptionPane.showMessageDialog(null, "The program must be restarted before "
+	    		+ "the new cards can be used. Please restart now.");
+	    	
 	    
 	    saveCards();
 	}
@@ -573,6 +614,11 @@ public class Gauntlet_Cards implements Serializable
 				
 			}
 		}
+	}
+	
+	public void showAllCards()
+	{
+		
 	}
 	
 	public Gauntlet_Cards getPhysicalCard()

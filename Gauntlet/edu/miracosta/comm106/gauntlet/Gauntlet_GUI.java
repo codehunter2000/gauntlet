@@ -8,11 +8,16 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 public class Gauntlet_GUI
 {
 	private static final int HEIGHT = 300;
 	private static final int WIDTH = 400;
+	private static final int PHYSICAL = 0;
+	private static final int EMOTIONAL  = 1;
+	private static final int MENTAL = 2;
+	private static final int CHALLENGE = 3;
 	private JMenuBar menuBar;
 	private JMenu menu;
 	private JMenuItem exit, addCards;
@@ -43,6 +48,8 @@ public class Gauntlet_GUI
 		
 		try 
 		{
+			Gauntlet_Cards launch = new Gauntlet_Cards();
+			launch.startUp();
 			eye = ImageIO.read(illuminati);
 			mental = ImageIO.read(brain);
 			physical = ImageIO.read(muscle);
@@ -83,14 +90,54 @@ public class Gauntlet_GUI
 			System.out.println("Image Not Found.");
 		}		
 	}
+	
+	public void getPhysicalCard()
+	{
+		Gauntlet_Cards physical = new Gauntlet_Cards();
+		Gauntlet_Cards card = physical.getPhysicalCard();
+		JOptionPane.showMessageDialog(null, card.getChallenge() + "\n" + 
+				card.getPoints() + " points");
+	}
+	
+	public void getEmotionalCard()
+	{
+		Gauntlet_Cards emotional = new Gauntlet_Cards();
+		Gauntlet_Cards card = emotional.getEmotionalCard();
+		JOptionPane.showMessageDialog(null, card.getChallenge() + "\n" +
+				card.getPoints() + " points");
+	}
+	
+	public void getMentalCard()
+	{
+		Gauntlet_Cards mental = new Gauntlet_Cards();
+		Gauntlet_Cards card = mental.getMentalCard();
+		JOptionPane.showMessageDialog(null, card.getChallenge() + "\n" +
+				card.getPoints() + " points");
+	}
+	
+	public void getChallengeCard()
+	{
+		Gauntlet_Cards challenge = new Gauntlet_Cards();
+		Gauntlet_Cards card = challenge.getChallengeCard();
+		JOptionPane.showMessageDialog(null, card.getChallenge() + "\n" +
+				card.getPoints() + " points");
+	}
 
 	
 	private class spinButtonListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			Gauntlet_Cards test = new Gauntlet_Cards();
-			
+			Random random = new Random();
+			int catagory = random.nextInt(4);
+			if (catagory == PHYSICAL)
+				getPhysicalCard();
+			else if (catagory == EMOTIONAL)
+				getEmotionalCard();
+			else if (catagory == MENTAL)
+				getMentalCard();
+			else if (catagory == CHALLENGE)
+				getChallengeCard();
 		}
 	}
 	
