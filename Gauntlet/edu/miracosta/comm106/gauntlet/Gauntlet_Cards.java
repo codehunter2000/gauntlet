@@ -618,7 +618,26 @@ public class Gauntlet_Cards implements Serializable
 	
 	public void showAllCards()
 	{
-		
+		for (Gauntlet_Cards gauntlet_Cards : physicalCards) 
+		{
+			System.out.println("\n" + gauntlet_Cards.challenge + "\n"
+					+ gauntlet_Cards.points + "\n");
+		}
+		for (Gauntlet_Cards gauntlet_Cards : emotionalCards) 
+		{
+			System.out.println("\n" + gauntlet_Cards.challenge + "\n"
+					+
+					gauntlet_Cards.points + "\n");			
+		}
+		for (Gauntlet_Cards gauntlet_Cards : mentalCards) {
+			System.out.println("\n" + gauntlet_Cards.question + "\n"
+					+ "\n" + gauntlet_Cards.answer + "\n" + 
+					gauntlet_Cards.points);
+		}
+		for (Gauntlet_Cards gauntlet_Cards : challengeCards) {
+			System.out.println("\n" + gauntlet_Cards.challenge
+					+ "\n" + gauntlet_Cards.points);
+		}
 	}
 	
 	public Gauntlet_Cards getPhysicalCard()

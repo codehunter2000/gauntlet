@@ -51,6 +51,7 @@ public class Gauntlet_GUI
 		{
 			launch = new Gauntlet_Cards();
 			launch.startUp();
+			launch.showAllCards();
 			eye = ImageIO.read(illuminati);
 			mental = ImageIO.read(brain);
 			physical = ImageIO.read(muscle);
