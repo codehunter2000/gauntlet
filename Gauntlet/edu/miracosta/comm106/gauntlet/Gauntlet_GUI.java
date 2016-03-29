@@ -2,22 +2,16 @@ package edu.miracosta.comm106.gauntlet;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-
 import java.awt.BorderLayout;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
 public class Gauntlet_GUI
 {
 	private static final int HEIGHT = 300;
 	private static final int WIDTH = 400;
-	private static final int PHYSICAL = 0;
-	private static final int EMOTIONAL  = 1;
-	private static final int MENTAL = 2;
-	private static final int CHALLENGE = 3;
 	private Gauntlet_Cards launch;
 	private JMenuBar menuBar;
 	private JMenu menu;

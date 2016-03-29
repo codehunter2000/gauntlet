@@ -3,10 +3,8 @@ package edu.miracosta.comm106.gauntlet;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.Scanner;
-
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,7 +17,6 @@ import java.io.Serializable;
 
 public class Gauntlet_Cards implements Serializable
 {
-	
 	private static final long serialVersionUID = -1252346999228244761L;
 	private static final String cardsPath = "Gauntlet/edu/miracosta/comm106/gauntlet/cards/cards.dat";
 	private int points;
@@ -36,7 +33,7 @@ public class Gauntlet_Cards implements Serializable
 		question = null;
 		answer = null;
 		challenge = null;
-		totalCards = new LinkedList();
+		totalCards = new LinkedList<>();
 		cards = new File(cardsPath);
 	}
 	
@@ -66,10 +63,7 @@ public class Gauntlet_Cards implements Serializable
 	public boolean checkIfFilesExist()
 	{
 		boolean exist = false;
-		int total = 0;		
 		if (cards.isFile())
-			total++;
-		if (total == 4)
 			exist = true;
 		
 		return exist;
@@ -294,6 +288,9 @@ public class Gauntlet_Cards implements Serializable
 	
 	public void showAllCards()
 	{
+		if (totalCards.isEmpty())
+			JOptionPane.showMessageDialog(panel, "List empty!", "Error", JOptionPane.ERROR_MESSAGE);
+		
 		for (Gauntlet_Cards theCard : totalCards) 
 		{
 			System.out.println("\n" + theCard.challenge + "\n"
