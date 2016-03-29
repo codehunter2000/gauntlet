@@ -21,7 +21,7 @@ public class Gauntlet_GUI
 	private Gauntlet_Cards launch;
 	private JMenuBar menuBar;
 	private JMenu menu;
-	private JMenuItem exit, addCards;
+	private JMenuItem exit, addCards, showCards;
 	private JFrame mainFrame;
 	private JPanel mainPanel;
 	private JLabel illuminatiImage,	brainImage, heartImage, muscleImage;
@@ -65,11 +65,14 @@ public class Gauntlet_GUI
 			menu = new JMenu("Menu");
 			exit = new JMenuItem("Exit");
 			addCards = new JMenuItem("Add cards");
+			showCards = new JMenuItem("Show cards");
 			spin = new JButton("GO!");
 			addCards.addActionListener(new addCardsButtonListener());
+			showCards.addActionListener(new showCardsButtonListener());
 			spin.addActionListener(new spinButtonListener());
 			exit.addActionListener(new exitButtonListener());
 			menu.add(addCards);
+			menu.add(showCards);
 			menu.add(exit);
 			menuBar.add(menu);
 			mainFrame.setJMenuBar(menuBar);
@@ -121,6 +124,15 @@ public class Gauntlet_GUI
 				card.getPoints() + " points");
 	}
 
+	
+	private class showCardsButtonListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			launch.showAllCards();
+		}
+	}
+	
 	
 	private class spinButtonListener implements ActionListener
 	{
