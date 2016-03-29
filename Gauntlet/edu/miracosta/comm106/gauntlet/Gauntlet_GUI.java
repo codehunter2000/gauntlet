@@ -96,34 +96,13 @@ public class Gauntlet_GUI
 		}		
 	}
 	
-	public void getPhysicalCard()
+	public void getCard()
 	{
-		Gauntlet_Cards card = launch.getPhysicalCard();
-		JOptionPane.showMessageDialog(null, card.getChallenge() + "\n" + 
-				card.getPoints() + " points");
-	}
-	
-	public void getEmotionalCard()
-	{
-		Gauntlet_Cards card = launch.getEmotionalCard();
+		Gauntlet_Cards card = launch.getCard();
 		JOptionPane.showMessageDialog(null, card.getChallenge() + "\n" +
 				card.getPoints() + " points");
 	}
 	
-	public void getMentalCard()
-	{
-		Gauntlet_Cards card = launch.getMentalCard();
-		JOptionPane.showMessageDialog(null, card.getChallenge() + "\n" +
-				card.getPoints() + " points");
-	}
-	
-	public void getChallengeCard()
-	{
-		Gauntlet_Cards card = launch.getChallengeCard();
-		JOptionPane.showMessageDialog(null, card.getChallenge() + "\n" +
-				card.getPoints() + " points");
-	}
-
 	
 	private class showCardsButtonListener implements ActionListener
 	{
@@ -138,16 +117,7 @@ public class Gauntlet_GUI
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			Random random = new Random();
-			int catagory = random.nextInt(4);
-			if (catagory == PHYSICAL)
-				getPhysicalCard();
-			else if (catagory == EMOTIONAL)
-				getEmotionalCard();
-			else if (catagory == MENTAL)
-				getMentalCard();
-			else if (catagory == CHALLENGE)
-				getChallengeCard();
+			getCard();
 		}
 	}
 	

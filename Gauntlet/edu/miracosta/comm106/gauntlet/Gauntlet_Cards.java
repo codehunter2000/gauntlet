@@ -21,40 +21,28 @@ public class Gauntlet_Cards implements Serializable
 {
 	
 	private static final long serialVersionUID = -1252346999228244761L;
-	private static final String physicalPath = "Gauntlet/edu/miracosta/comm106/gauntlet/cards/physical.dat";
-	private static final String emotionalPath = "Gauntlet/edu/miracosta/comm106/gauntlet/cards/emotion.dat";
-	private static final String mentalPath = "Gauntlet/edu/miracosta/comm106/gauntlet/cards/mental.dat";
-	private static final String challengePath = "Gauntlet/edu/miracosta/comm106/gauntlet/cards/challenge.dat";
+	private static final String cardsPath = "Gauntlet/edu/miracosta/comm106/gauntlet/cards/cards.dat";
 	private int points;
-	private String catagory;
 	private String question;
 	private String answer;
 	private String challenge;
-	private static File physicalQ, emotionalQ, mentalQ, challengeQ;
+	private static File cards;
 	private JPanel panel = new JPanel();
-	private static LinkedList<Gauntlet_Cards> physicalCards, emotionalCards, mentalCards, challengeCards;
+	private static LinkedList<Gauntlet_Cards> totalCards;
 	
 	public Gauntlet_Cards()
 	{
 		points = 0;
-		catagory = null;
 		question = null;
 		answer = null;
 		challenge = null;
-		physicalCards = new LinkedList<>();
-		emotionalCards = new LinkedList<>();
-		mentalCards = new LinkedList<>();
-		challengeCards = new LinkedList<>();
-		physicalQ = new File(physicalPath);
-		emotionalQ = new File(emotionalPath);
-		mentalQ = new File(mentalPath);
-		challengeQ = new File(challengePath);
+		totalCards = new LinkedList();
+		cards = new File(cardsPath);
 	}
 	
-	public Gauntlet_Cards(String cat, String q, String answ, int points)
+	public Gauntlet_Cards(String q, String answ, int points)
 	{
 		this.points = points;
-		catagory = cat;
 		question = q;
 		answer = answ;
 	}
@@ -71,32 +59,15 @@ public class Gauntlet_Cards implements Serializable
 		if (filesExist == false)
 			createDataFiles();
 		generateCards();
-		if (physicalCards.isEmpty())
-			JOptionPane.showMessageDialog(panel, "No physical cards!", "Error", 
-					JOptionPane.ERROR_MESSAGE);
-		if (emotionalCards.isEmpty())
-			JOptionPane.showMessageDialog(panel, "No emotional cards!", "Error", 
-					JOptionPane.ERROR_MESSAGE);
-		if (mentalCards.isEmpty())
-			JOptionPane.showMessageDialog(panel, "No mental cards!", "Error", 
-					JOptionPane.ERROR_MESSAGE);
-		if (challengeCards.isEmpty())
-			JOptionPane.showMessageDialog(panel, "No challenge cards!" , "Error", 
-					JOptionPane.ERROR_MESSAGE);
-		
+		if (totalCards.isEmpty())
+			JOptionPane.showMessageDialog(panel, "No physical cards!", "Error", JOptionPane.ERROR_MESSAGE);
 	}
 	
 	public boolean checkIfFilesExist()
 	{
 		boolean exist = false;
-		int total = 0;
-		if (physicalQ.exists())
-			total++;
-		if (emotionalQ.exists())
-			total++;
-		if (mentalQ.exists())
-			total++;
-		if (challengeQ.exists())
+		int total = 0;		
+		if (cards.isFile())
 			total++;
 		if (total == 4)
 			exist = true;
@@ -108,56 +79,15 @@ public class Gauntlet_Cards implements Serializable
 	{
 		boolean exists = false;
 		
-		if (!physicalQ.exists())
+		try
 		{
-			try 
-			{
-				physicalQ.createNewFile();
-			} 
-			
-			catch (IOException e) 
-			{
-				System.out.println("Problem creating file.");
-			}
+			if (!cards.exists())
+				cards.createNewFile();
 		}
 		
-		if (!emotionalQ.exists())
+		catch (IOException e) 
 		{
-			try
-			{
-				emotionalQ.createNewFile();
-			}
-			
-			catch (IOException e)
-			{
-				System.out.println("Problem creating file.");
-			}
-		}
-		
-		if (!mentalQ.exists())
-		{
-			try 
-			{
-				mentalQ.createNewFile();
-			}
-			
-			catch (IOException e)
-			{
-				System.out.println("Problem creating file.");
-			}
-		}
-		
-		if (!challengeQ.exists())
-		{
-			try
-			{
-				challengeQ.createNewFile();
-			}
-			
-			catch (IOException e)
-			{
-				System.out.println("Problem creating file.");
-			}
+			System.out.println("Problem creating file.");
 		}
 		
 		exists = checkIfFilesExist();
@@ -168,28 +98,13 @@ public class Gauntlet_Cards implements Serializable
 	public boolean checkIfFilesAreEmpty()
 	{
 		boolean empty = false;
-		int total = 0;
-		
+
 		try 
 		{
-			Scanner checkP = new Scanner(physicalQ);
-			Scanner checkE = new Scanner(emotionalQ);
-			Scanner checkM = new Scanner(mentalQ);
-			Scanner checkC = new Scanner(challengeQ);
-			if (!checkP.hasNext())
-				total++;
-			if (!checkE.hasNext())
-				total++;
-			if (!checkM.hasNext())
-				total++;
-			if (!checkC.hasNext())
-				total++;
-			if (total != 0)
+			Scanner check = new Scanner(cards);
+			if (!check.hasNext())
 				empty = true;
-			checkP.close();
-			checkE.close();
-			checkM.close();
-			checkC.close();
+			check.close();
 			
 		} 
 		catch (FileNotFoundException e) 
@@ -213,7 +128,7 @@ public class Gauntlet_Cards implements Serializable
 		
 		catch (FileNotFoundException e) 
 		{
-		
+			JOptionPane.showMessageDialog(panel, "File not found!", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		
 		return isEmpty;
@@ -231,10 +146,7 @@ public class Gauntlet_Cards implements Serializable
 					, "Error", JOptionPane.ERROR_MESSAGE);
 		try
 		{
-			ObjectInputStream physical = new ObjectInputStream(new FileInputStream(physicalPath));
-			ObjectInputStream emotional = new ObjectInputStream(new FileInputStream(emotionalPath));
-			ObjectInputStream mental = new ObjectInputStream(new FileInputStream(mentalPath));
-			ObjectInputStream challenge = new ObjectInputStream(new FileInputStream(challengePath));
+			ObjectInputStream cardInput = new ObjectInputStream(new FileInputStream(cards));
 
 			try
 			{
@@ -242,8 +154,8 @@ public class Gauntlet_Cards implements Serializable
 				{
 					try 
 					{
-						Gauntlet_Cards element = (Gauntlet_Cards) physical.readObject();
-						physicalCards.add(element);
+						Gauntlet_Cards element = (Gauntlet_Cards) cardInput.readObject();
+						totalCards.add(element);
 					}
 					catch (EOFException e)
 					{
@@ -266,101 +178,8 @@ public class Gauntlet_Cards implements Serializable
 					}
 				}
 				
-				physical.close();
-				eof = false;
+				cardInput.close();
 				
-				while (!eof)
-				{
-					try 
-					{
-						Gauntlet_Cards element = (Gauntlet_Cards) emotional.readObject();
-						emotionalCards.add(element);
-					}
-					catch (EOFException e)
-					{
-						eof = true;
-					}
-					catch (ClassNotFoundException e) 
-					{
-						JOptionPane.showMessageDialog(panel, "Problem reading file!", "Error", JOptionPane.ERROR_MESSAGE);
-
-					}
-					catch (FileNotFoundException e)
-					{
-						JOptionPane.showMessageDialog(panel, "File not found!", "Error", JOptionPane.ERROR_MESSAGE);
-
-					}
-					catch (IOException e)
-					{
-						JOptionPane.showMessageDialog(panel, "Problem reading file!", "Error", JOptionPane.ERROR_MESSAGE);
-
-					}
-					
-					
-				}
-				
-				emotional.close();
-				eof = false;
-				
-				while (!eof)
-				{
-					try 
-					{
-						Gauntlet_Cards element = (Gauntlet_Cards) mental.readObject();
-						mentalCards.add(element);
-					}
-					catch (EOFException e)
-					{
-						eof = true;
-					}
-					catch (ClassNotFoundException e) 
-					{
-						JOptionPane.showMessageDialog(panel, "Problem reading file!", "Error", JOptionPane.ERROR_MESSAGE);
-
-					}
-					catch (FileNotFoundException e)
-					{
-						JOptionPane.showMessageDialog(panel, "File not found!", "Error", JOptionPane.ERROR_MESSAGE);
-
-					}
-					catch (IOException e)
-					{
-						JOptionPane.showMessageDialog(panel, "Problem reading file!", "Error", JOptionPane.ERROR_MESSAGE);
-
-					}
-				}
-				
-				mental.close();
-				eof = false;
-				
-				while (!eof)
-				{
-					try 
-					{
-						Gauntlet_Cards element = (Gauntlet_Cards) challenge.readObject();
-						challengeCards.add(element);
-					}
-					catch (EOFException e)
-					{
-						eof = true;
-					}
-					catch (ClassNotFoundException e) 
-					{
-						JOptionPane.showMessageDialog(panel, "Problem reading file!", "Error", JOptionPane.ERROR_MESSAGE);
-
-					}
-					catch (FileNotFoundException e)
-					{
-						JOptionPane.showMessageDialog(panel, "File not found!", "Error", JOptionPane.ERROR_MESSAGE);
-
-					}
-					catch (IOException e)
-					{
-						JOptionPane.showMessageDialog(panel, "Problem reading file!", "Error", JOptionPane.ERROR_MESSAGE);
-
-					}
-				}
-				challenge.close();
 			}
 			catch (Exception e)
 			{
@@ -394,12 +213,12 @@ public class Gauntlet_Cards implements Serializable
 	    {
 	    	question = JOptionPane.showInputDialog("Please enter the question");
 	    	answer = JOptionPane.showInputDialog("Please enter the answer");
-	    	points = JOptionPane.showInputDialog("Please enter the amount of points for this cards");
 	    	try
 	    	{
+	    		points = JOptionPane.showInputDialog("Please enter the amount of points for this cards");
 	    		totalPoints = Integer.parseInt(points);
-	    		Gauntlet_Cards newCard = new Gauntlet_Cards(input, question, answer, totalPoints);
-		    	mentalCards.add(newCard);
+	    		Gauntlet_Cards newCard = new Gauntlet_Cards(question, answer, totalPoints);
+		    	totalCards.add(newCard);
 	    	}
 	    	catch (NumberFormatException x)
 	    	{
@@ -416,10 +235,7 @@ public class Gauntlet_Cards implements Serializable
 	    		points = JOptionPane.showInputDialog("Please enter the points for this card.");
 	    		totalPoints = Integer.parseInt(points);
 	    		Gauntlet_Cards newCard = new Gauntlet_Cards(challenge, totalPoints);
-	    		if (input == c)
-	    			challengeCards.add(newCard);
-	    		else if (input == e)
-	    			emotionalCards.add(newCard);
+	    		totalCards.add(newCard);
 	    		
 	    	}
 	    	catch (NumberFormatException y)
@@ -437,7 +253,7 @@ public class Gauntlet_Cards implements Serializable
 	    	{
 	    		totalPoints = Integer.parseInt(points);
 	    		Gauntlet_Cards newCard = new Gauntlet_Cards(strength, totalPoints);
-	    		physicalCards.add(newCard);
+	    		totalCards.add(newCard);
 	    	}
 	    	
 	    	catch (NumberFormatException steve)
@@ -457,48 +273,17 @@ public class Gauntlet_Cards implements Serializable
 		
 		try
 		{
-			ObjectOutputStream physical = new ObjectOutputStream(new FileOutputStream(physicalQ));
-			ObjectOutputStream emotional = new ObjectOutputStream(new FileOutputStream(emotionalQ));
-			ObjectOutputStream mental = new ObjectOutputStream(new FileOutputStream(mentalQ));
-			ObjectOutputStream challenge = new ObjectOutputStream(new FileOutputStream(challengeQ));
+			ObjectOutputStream cardOut = new ObjectOutputStream(new FileOutputStream(cards));
 			
-			if (physicalQ.isFile())
+			if (cards.isFile())
 			{
-				for (Gauntlet_Cards gauntlet_Cards : physicalCards) 
+				for (Gauntlet_Cards theCards : totalCards) 
 					{
-						physical.writeObject(gauntlet_Cards);
+						cardOut.writeObject(theCards);
 					}
 			}
 			
-			if (emotionalQ.isFile())
-			{
-				for (Gauntlet_Cards gauntlet_Cards : emotionalCards) 
-					{
-						emotional.writeObject(gauntlet_Cards);
-					}
-			}
-			
-			if (mentalQ.isFile())
-			{
-				for (Gauntlet_Cards gauntlet_Cards : mentalCards) 
-					{
-						mental.writeObject(gauntlet_Cards);
-					}
-			}
-			
-			if (challengeQ.isFile())
-			{
-
-				for (Gauntlet_Cards gauntlet_Cards : challengeCards) 
-				{
-					challenge.writeObject(gauntlet_Cards);
-				}
-			}
-			
-			physical.close();
-			emotional.close();
-			mental.close();
-			challenge.close();
+			cardOut.close();
 		}
 		
 		catch (IOException e)
@@ -509,61 +294,20 @@ public class Gauntlet_Cards implements Serializable
 	
 	public void showAllCards()
 	{
-		for (Gauntlet_Cards gauntlet_Cards : physicalCards) 
+		for (Gauntlet_Cards theCard : totalCards) 
 		{
-			System.out.println("\n" + gauntlet_Cards.challenge + "\n"
-					+ gauntlet_Cards.points + "\n");
+			System.out.println("\n" + theCard.challenge + "\n"
+					+ theCard.points + "\n");
 		}
-		for (Gauntlet_Cards gauntlet_Cards : emotionalCards) 
-		{
-			System.out.println("\n" + gauntlet_Cards.challenge + "\n"
-					+
-					gauntlet_Cards.points + "\n");			
-		}
-		for (Gauntlet_Cards gauntlet_Cards : mentalCards) {
-			System.out.println("\n" + gauntlet_Cards.question + "\n"
-					+ "\n" + gauntlet_Cards.answer + "\n" + 
-					gauntlet_Cards.points);
-		}
-		for (Gauntlet_Cards gauntlet_Cards : challengeCards) {
-			System.out.println("\n" + gauntlet_Cards.challenge
-					+ "\n" + gauntlet_Cards.points);
-		}
+		
 	}
 	
-	public Gauntlet_Cards getPhysicalCard()
+	public Gauntlet_Cards getCard()
 	{
 		Gauntlet_Cards card = null;
 		Random randomCard = new Random();
-		int index = randomCard.nextInt(physicalCards.size());
-		card = physicalCards.get(index);		
-		return card;
-	}
-	
-	public Gauntlet_Cards getEmotionalCard()
-	{
-		Gauntlet_Cards card = null;
-		Random randomCard = new Random();
-		int index = randomCard.nextInt(emotionalCards.size());
-		card = physicalCards.get(index);
-		return card;
-	}
-	
-	public Gauntlet_Cards getMentalCard()
-	{
-		Gauntlet_Cards card = null;
-		Random randomCard = new Random();
-		int index = randomCard.nextInt(mentalCards.size());
-		card = mentalCards.get(index);
-		return card;
-	}
-	
-	public Gauntlet_Cards getChallengeCard()
-	{
-		Gauntlet_Cards card = null;
-		Random randomCard = new Random();
-		int index = randomCard.nextInt(challengeCards.size());
-		card = challengeCards.get(index);
+		int index = randomCard.nextInt(totalCards.size());
+		card = totalCards.get(index);		
 		return card;
 	}
 	
@@ -571,11 +315,6 @@ public class Gauntlet_Cards implements Serializable
 	public int getPoints()
 	{
 		return points;
-	}
-	
-	public String getCatagory()
-	{
-		return catagory;
 	}
 	
 	public String getQuestion()
@@ -596,11 +335,6 @@ public class Gauntlet_Cards implements Serializable
 	public void setPoints(int points)
 	{
 		this.points = points;
-	}
-	
-	public void setCatagory(String cat)
-	{
-		catagory = cat;
 	}
 	
 	public void setQuestion (String q)
