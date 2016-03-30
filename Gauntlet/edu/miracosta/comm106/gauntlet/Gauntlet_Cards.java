@@ -2,7 +2,6 @@ package edu.miracosta.comm106.gauntlet;
 
 import java.util.LinkedList;
 import java.util.Random;
-import java.util.Scanner;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.io.EOFException;
@@ -20,12 +19,13 @@ public class Gauntlet_Cards implements Serializable
 	private static final long serialVersionUID = -1252346999228244761L;
 	private static final String cardsPath = "Gauntlet/edu/miracosta/comm106/gauntlet/cards/cards.dat";
 	private int points;
+	private String catagory;
 	private String question;
 	private String answer;
 	private String challenge;
-	private static File cards;
+	private File cards;
 	private JPanel panel = new JPanel();
-	private static LinkedList<Gauntlet_Cards> totalCards;
+	private LinkedList<Gauntlet_Cards> totalCards;
 	
 	public Gauntlet_Cards()
 	{
@@ -37,15 +37,17 @@ public class Gauntlet_Cards implements Serializable
 		cards = new File(cardsPath);
 	}
 	
-	public Gauntlet_Cards(String q, String answ, int points)
+	public Gauntlet_Cards(String cat, String q, String answ, int points)
 	{
+		catagory = cat;
 		this.points = points;
 		question = q;
 		answer = answ;
 	}
 	
-	public Gauntlet_Cards(String chall, int points)
+	public Gauntlet_Cards(String cat, String chall, int points)
 	{
+		catagory = cat;
 		this.points = points;
 		challenge = chall;
 	}
@@ -56,8 +58,6 @@ public class Gauntlet_Cards implements Serializable
 		if (filesExist == false)
 			createDataFiles();
 		generateCards();
-		if (totalCards.isEmpty())
-			JOptionPane.showMessageDialog(panel, "No physical cards!", "Error", JOptionPane.ERROR_MESSAGE);
 	}
 	
 	public boolean checkIfFilesExist()
@@ -75,7 +75,7 @@ public class Gauntlet_Cards implements Serializable
 		
 		try
 		{
-			if (!cards.exists())
+			if (!cards.isFile())
 				cards.createNewFile();
 		}
 		
@@ -95,38 +95,20 @@ public class Gauntlet_Cards implements Serializable
 
 		try 
 		{
-			Scanner check = new Scanner(cards);
-			if (!check.hasNext())
+			if (cards.length() == 0)
 				empty = true;
-			check.close();
-			
+			else if (cards.length() != 0)
+				empty = false;
 		} 
-		catch (FileNotFoundException e) 
+		
+		catch (SecurityException e)
 		{
-			System.out.println("File Not Found");
+			JOptionPane.showMessageDialog(panel, "Problem with file!", "Error", JOptionPane.ERROR_MESSAGE);	
 		}
 		
 		return empty;
 	}
 	
-	public boolean checkIfEmpty(File dataFile)
-	{
-		boolean isEmpty = false;
-		try 
-		{
-			Scanner check = new Scanner(dataFile);
-			if (!check.hasNextLine())
-				isEmpty = true;
-			check.close();
-		} 
-		
-		catch (FileNotFoundException e) 
-		{
-			JOptionPane.showMessageDialog(panel, "File not found!", "Error", JOptionPane.ERROR_MESSAGE);
-		}
-		
-		return isEmpty;
-	}
 	
 	public void generateCards()
 	{
@@ -228,7 +210,7 @@ public class Gauntlet_Cards implements Serializable
 	    	{
 	    		points = JOptionPane.showInputDialog("Please enter the points for this card.");
 	    		totalPoints = Integer.parseInt(points);
-	    		Gauntlet_Cards newCard = new Gauntlet_Cards(challenge, totalPoints);
+	    		Gauntlet_Cards newCard = new Gauntlet_Cards(input, challenge, totalPoints);
 	    		totalCards.add(newCard);
 	    		
 	    	}
@@ -246,7 +228,7 @@ public class Gauntlet_Cards implements Serializable
 	    	try 
 	    	{
 	    		totalPoints = Integer.parseInt(points);
-	    		Gauntlet_Cards newCard = new Gauntlet_Cards(strength, totalPoints);
+	    		Gauntlet_Cards newCard = new Gauntlet_Cards(input, strength, totalPoints);
 	    		totalCards.add(newCard);
 	    	}
 	    	
@@ -293,8 +275,16 @@ public class Gauntlet_Cards implements Serializable
 		
 		for (Gauntlet_Cards theCard : totalCards) 
 		{
-			System.out.println("\n" + theCard.challenge + "\n"
-					+ theCard.points + "\n");
+			if (theCard.challenge != null)
+			{
+				System.out.println("\n" + theCard.challenge + "\n" + theCard.points + "\n");
+			}
+			
+			else if (theCard.challenge == null)
+			{
+				System.out.println("\n" + theCard.question + "\n" + theCard.answer + "\n" 
+			+ theCard.points + "\n");
+			}
 		}
 		
 	}

@@ -67,6 +67,7 @@ public class Gauntlet_GUI
 			exit.addActionListener(new exitButtonListener());
 			menu.add(addCards);
 			menu.add(showCards);
+			//menu.add(saveCards);
 			menu.add(exit);
 			menuBar.add(menu);
 			mainFrame.setJMenuBar(menuBar);
@@ -119,8 +120,7 @@ public class Gauntlet_GUI
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			Gauntlet_Cards newCards = new Gauntlet_Cards();
-			newCards.createCards();
+			launch.createCards();
 		}
 	}
 	
