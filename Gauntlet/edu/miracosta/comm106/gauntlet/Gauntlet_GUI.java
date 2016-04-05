@@ -17,7 +17,7 @@ public class Gauntlet_GUI
 	private Gauntlet_Cards launch;
 	private JMenuBar menuBar;
 	private JMenu menu;
-	private JMenuItem exit, addCards, showCards, addPlayer;
+	private JMenuItem exit, addCards, showCards, addPlayer, showPlayers;
 	private JFrame mainFrame;
 	private JPanel mainPanel;
 	private JLabel illuminatiImage,	brainImage, heartImage, muscleImage;
@@ -25,6 +25,9 @@ public class Gauntlet_GUI
 	private File illuminati, brain, heart, muscle;
 	private BufferedImage eye, mental, emotional, physical;
 	private int playerIndex;
+	private String[] threeOptions = {"Show answer", "Completed! Give me the points!", 
+			"Commence the walk of shame"};
+	private String[] twoOptions = {"Completed! Give me the points!", "Commence the walk of shame"};
 
 	
 	public Gauntlet_GUI()
@@ -67,15 +70,18 @@ public class Gauntlet_GUI
 			addCards = new JMenuItem("Add cards");
 			showCards = new JMenuItem("Show cards");
 			addPlayer = new JMenuItem("Add player");
+			showPlayers = new JMenuItem("Show players");
 			spin = new JButton("GO!");
 			addCards.addActionListener(new addCardsButtonListener());
 			showCards.addActionListener(new showCardsButtonListener());
 			addPlayer.addActionListener(new addPlayerButtonListener());
+			showPlayers.addActionListener(new showPlayersButtonListener());
 			spin.addActionListener(new spinButtonListener());
 			exit.addActionListener(new exitButtonListener());
 			menu.add(addCards);
 			menu.add(addPlayer);
 			menu.add(showCards);
+			menu.add(showPlayers);
 			//menu.add(saveCards);
 			menu.add(exit);
 			menuBar.add(menu);
@@ -103,10 +109,58 @@ public class Gauntlet_GUI
 	public void getCard()
 	{
 		Gauntlet_Cards card = launch.getCard();
-		JOptionPane.showMessageDialog(null, card.getChallenge() + "\n" +
-				card.getPoints() + " points");
+		if (card.getCatagory() == "Mental")
+		{
+			int choice = JOptionPane.showOptionDialog(new JFrame(), card.getQuestion() + "\n" + card.getPoints() 
+			+ " points", "Mental", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, threeOptions, threeOptions[2]);
+			if (choice == JOptionPane.YES_OPTION)
+			{
+				JOptionPane.showMessageDialog(null, card.getAnswer());
+			}
+			
+			else if (choice == JOptionPane.NO_OPTION)
+			{
+				Player thePlayer = players.get(playerIndex);
+				int points = thePlayer.getPoints();
+				points = points + card.getPoints();
+				thePlayer.setPoints(points);
+				players.set(playerIndex, thePlayer);
+			}
+		}
+		else 
+		{
+			int choice = JOptionPane.showOptionDialog(new JFrame(), card.getChallenge(), "Challenge", 
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, twoOptions, twoOptions[1]);
+			if (choice == JOptionPane.NO_OPTION)
+			{
+				Player thePlayer = players.get(playerIndex);
+				int points = thePlayer.getPoints();
+				points = points + card.getPoints();
+				thePlayer.setPoints(points);
+				players.set(playerIndex, thePlayer);
+			}
+		}
+		
+		if ((playerIndex + 1) == players.size())
+			playerIndex = 0;
+		else 
+			playerIndex++;
 	}
 	
+	
+	private class showPlayersButtonListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			if (players.isEmpty())
+				System.out.println("No players!");
+			else
+				for (Player player : players) 
+				{
+					System.out.println(player);
+				}
+		}
+	}
 	
 	private class addPlayerButtonListener implements ActionListener
 	{
@@ -150,5 +204,4 @@ public class Gauntlet_GUI
 			System.exit(0);
 		}
 	}
-	
 }

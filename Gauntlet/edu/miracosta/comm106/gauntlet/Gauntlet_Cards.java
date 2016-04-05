@@ -39,7 +39,7 @@ public class Gauntlet_Cards implements Serializable
 	
 	public Gauntlet_Cards(String cat, String q, String answ, int points)
 	{
-		catagory = cat;
+		setCatagory(cat);
 		this.points = points;
 		question = q;
 		answer = answ;
@@ -47,7 +47,7 @@ public class Gauntlet_Cards implements Serializable
 	
 	public Gauntlet_Cards(String cat, String chall, int points)
 	{
-		catagory = cat;
+		setCatagory(cat);
 		this.points = points;
 		challenge = chall;
 	}
@@ -193,7 +193,7 @@ public class Gauntlet_Cards implements Serializable
 	    	{
 	    		points = JOptionPane.showInputDialog("Please enter the amount of points for this cards");
 	    		totalPoints = Integer.parseInt(points);
-	    		Gauntlet_Cards newCard = new Gauntlet_Cards(question, answer, totalPoints);
+	    		Gauntlet_Cards newCard = new Gauntlet_Cards(input, question, answer, totalPoints);
 		    	totalCards.add(newCard);
 	    	}
 	    	catch (NumberFormatException x)
@@ -337,6 +337,14 @@ public class Gauntlet_Cards implements Serializable
 	public void setChallenge(String chall)
 	{
 		challenge = chall;
+	}
+
+	public String getCatagory() {
+		return catagory;
+	}
+
+	public void setCatagory(String catagory) {
+		this.catagory = catagory;
 	}
 }
 
