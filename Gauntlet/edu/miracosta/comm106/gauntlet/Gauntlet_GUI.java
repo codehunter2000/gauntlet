@@ -7,21 +7,24 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Gauntlet_GUI
 {
 	private static final int HEIGHT = 300;
 	private static final int WIDTH = 400;
+	private ArrayList<Player> players;
 	private Gauntlet_Cards launch;
 	private JMenuBar menuBar;
 	private JMenu menu;
-	private JMenuItem exit, addCards, showCards;
+	private JMenuItem exit, addCards, showCards, addPlayer;
 	private JFrame mainFrame;
 	private JPanel mainPanel;
 	private JLabel illuminatiImage,	brainImage, heartImage, muscleImage;
 	private JButton spin;
 	private File illuminati, brain, heart, muscle;
 	private BufferedImage eye, mental, emotional, physical;
+	private int playerIndex;
 
 	
 	public Gauntlet_GUI()
@@ -30,6 +33,9 @@ public class Gauntlet_GUI
 		brain = new File("Gauntlet/edu/miracosta/comm106/gauntlet/images/activebrain.jpg");
 		heart = new File("Gauntlet/edu/miracosta/comm106/gauntlet/images/Red-Heart.png");
 		muscle = new File("Gauntlet/edu/miracosta/comm106/gauntlet/images/muscle.jpg");
+		
+		players = new ArrayList<>();
+		playerIndex = 0;
 		
 		if (!illuminati.exists())
 			System.out.println("Illuminati DNE");
@@ -60,12 +66,15 @@ public class Gauntlet_GUI
 			exit = new JMenuItem("Exit");
 			addCards = new JMenuItem("Add cards");
 			showCards = new JMenuItem("Show cards");
+			addPlayer = new JMenuItem("Add player");
 			spin = new JButton("GO!");
 			addCards.addActionListener(new addCardsButtonListener());
 			showCards.addActionListener(new showCardsButtonListener());
+			addPlayer.addActionListener(new addPlayerButtonListener());
 			spin.addActionListener(new spinButtonListener());
 			exit.addActionListener(new exitButtonListener());
 			menu.add(addCards);
+			menu.add(addPlayer);
 			menu.add(showCards);
 			//menu.add(saveCards);
 			menu.add(exit);
@@ -98,6 +107,16 @@ public class Gauntlet_GUI
 				card.getPoints() + " points");
 	}
 	
+	
+	private class addPlayerButtonListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			Player thePlayer = new Player();
+			Player newPlayer = thePlayer.addNewPlayer();
+			players.add(newPlayer);
+		}
+	}
 	
 	private class showCardsButtonListener implements ActionListener
 	{
