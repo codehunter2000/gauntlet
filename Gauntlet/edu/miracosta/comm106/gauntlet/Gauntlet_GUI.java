@@ -11,8 +11,8 @@ import java.util.ArrayList;
 
 public class Gauntlet_GUI
 {
-	private static final int HEIGHT = 300;
-	private static final int WIDTH = 400;
+	private static final int HEIGHT = 400;
+	private static final int WIDTH = 450;
 	private ArrayList<Player> players;
 	private Gauntlet_Cards launch, card;
 	private JMenuBar menuBar;
@@ -23,26 +23,26 @@ public class Gauntlet_GUI
 	private JLabel illuminatiImage;
 	private JButton spin, solved, answer, fail;
 	private JTextArea questionText;
-	private File illuminati;
-	private BufferedImage eye;
+	private File logo;
+	private BufferedImage gauntlet;
 	private int playerIndex;
 	private String[] twoOptions = {"Completed! Give me the points!", "Commence the walk of shame"};
 
 	
 	public Gauntlet_GUI()
 	{
-		illuminati = new File("Gauntlet/edu/miracosta/comm106/gauntlet/images/The-Illuminati-Eye.png");
+		logo = new File("Gauntlet/edu/miracosta/comm106/gauntlet/images/image1_resize.jpg");
 		players = new ArrayList<>();
 		playerIndex = 0;
 		
-		if (!illuminati.exists())
+		if (!logo.exists())
 			System.out.println("Illuminati DNE");
 		
 		try 
 		{
 			launch = new Gauntlet_Cards();
 			launch.startUp();
-			eye = ImageIO.read(illuminati);
+			gauntlet = ImageIO.read(logo);
 			mainFrame = new JFrame("GAUNTLET");
 			mainFrame.setSize(WIDTH, HEIGHT);
 			mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -70,7 +70,7 @@ public class Gauntlet_GUI
 			menuBar.add(menu);
 			mainFrame.setJMenuBar(menuBar);
 			
-			illuminatiImage = new JLabel(new ImageIcon(eye));
+			illuminatiImage = new JLabel(new ImageIcon(gauntlet));
 			mainPanel.add(illuminatiImage, BorderLayout.CENTER);
 			mainPanel.add(spin, BorderLayout.SOUTH);
 			mainFrame.add(mainPanel);
