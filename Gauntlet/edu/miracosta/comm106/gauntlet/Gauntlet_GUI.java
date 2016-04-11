@@ -14,50 +14,35 @@ public class Gauntlet_GUI
 	private static final int HEIGHT = 300;
 	private static final int WIDTH = 400;
 	private ArrayList<Player> players;
-	private Gauntlet_Cards launch;
+	private Gauntlet_Cards launch, card;
 	private JMenuBar menuBar;
 	private JMenu menu;
-	private JMenuItem exit, addCards, showCards, addPlayer, showPlayers, showPoints;
-	private JFrame mainFrame;
-	private JPanel mainPanel;
-	private JLabel illuminatiImage,	brainImage, heartImage, muscleImage;
-	private JButton spin;
-	private File illuminati, brain, heart, muscle;
-	private BufferedImage eye, mental, emotional, physical;
+	private JMenuItem exit, addCards, showCards, addPlayer, showPoints;
+	private JFrame mainFrame, questionFrame;
+	private JPanel mainPanel, questionPanel;
+	private JLabel illuminatiImage;
+	private JButton spin, solved, answer, fail;
+	private JTextArea questionText;
+	private File illuminati;
+	private BufferedImage eye;
 	private int playerIndex;
-	private String[] threeOptions = {"Show answer", "Completed! Give me the points!", 
-			"Commence the walk of shame"};
 	private String[] twoOptions = {"Completed! Give me the points!", "Commence the walk of shame"};
 
 	
 	public Gauntlet_GUI()
 	{
 		illuminati = new File("Gauntlet/edu/miracosta/comm106/gauntlet/images/The-Illuminati-Eye.png");
-		brain = new File("Gauntlet/edu/miracosta/comm106/gauntlet/images/activebrain.jpg");
-		heart = new File("Gauntlet/edu/miracosta/comm106/gauntlet/images/Red-Heart.png");
-		muscle = new File("Gauntlet/edu/miracosta/comm106/gauntlet/images/muscle.jpg");
-		
 		players = new ArrayList<>();
 		playerIndex = 0;
 		
 		if (!illuminati.exists())
 			System.out.println("Illuminati DNE");
-		if (!brain.exists())
-			System.out.println("If I only had a brain!");
-		if (!heart.exists())
-			System.out.println("You sin in the name of rock 'n roll.");
-		if (!muscle.exists())
-			System.out.println("Weakling");
-		
 		
 		try 
 		{
 			launch = new Gauntlet_Cards();
 			launch.startUp();
 			eye = ImageIO.read(illuminati);
-			mental = ImageIO.read(brain);
-			physical = ImageIO.read(muscle);
-			emotional = ImageIO.read(heart);
 			mainFrame = new JFrame("GAUNTLET");
 			mainFrame.setSize(WIDTH, HEIGHT);
 			mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -69,34 +54,24 @@ public class Gauntlet_GUI
 			addCards = new JMenuItem("Add cards");
 			showCards = new JMenuItem("Show cards");
 			addPlayer = new JMenuItem("Add player");
-			showPlayers = new JMenuItem("Show players");
 			showPoints = new JMenuItem("Show players");
 			spin = new JButton("GO!");
 			addCards.addActionListener(new addCardsButtonListener());
 			showCards.addActionListener(new showCardsButtonListener());
 			addPlayer.addActionListener(new addPlayerButtonListener());
-			showPlayers.addActionListener(new showPlayersButtonListener());
 			showPoints.addActionListener(new showPointsButtonListener());
 			spin.addActionListener(new spinButtonListener());
 			exit.addActionListener(new exitButtonListener());
 			menu.add(addCards);
 			menu.add(addPlayer);
 			menu.add(showCards);
-			menu.add(showPlayers);
 			menu.add(showPoints);
-			//menu.add(saveCards);
 			menu.add(exit);
 			menuBar.add(menu);
 			mainFrame.setJMenuBar(menuBar);
 			
 			illuminatiImage = new JLabel(new ImageIcon(eye));
-			brainImage = new JLabel(new ImageIcon(mental));
-			heartImage = new JLabel(new ImageIcon(emotional));
-			muscleImage = new JLabel(new ImageIcon(physical));
 			mainPanel.add(illuminatiImage, BorderLayout.CENTER);
-//			mainPanel.add(brainImage, BorderLayout.NORTH);
-//			mainPanel.add(heartImage, BorderLayout.EAST);
-//			mainPanel.add(muscleImage, BorderLayout.WEST);
 			mainPanel.add(spin, BorderLayout.SOUTH);
 			mainFrame.add(mainPanel);
 			mainFrame.setVisible(true);
@@ -104,35 +79,39 @@ public class Gauntlet_GUI
 		
 		catch (IOException e) 
 		{
-			System.out.println("Image Not Found.");
+			JOptionPane.showMessageDialog(null, "Image not found!");
 		}		
+	}
+	
+	public void buildQestionWindow()
+	{
+		questionFrame = new JFrame("Mental");
+		questionPanel = new JPanel();
+		questionText = new JTextArea();
+		solved = new JButton("Completed! Give me the points!");
+		fail = new JButton("Commence the walk of shame");
+		answer = new JButton("Show answer");
+		questionFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		questionText.setText(card.getQuestion() + "\n" + card.getPoints() + " points");
+		solved.addActionListener(new solvedButtonListener());
+		fail.addActionListener(new failButtonListener());
+		answer.addActionListener(new answerButtonListener());
+		questionPanel.add(questionText);
+		questionPanel.add(solved);
+		questionPanel.add(fail);
+		questionPanel.add(answer);
+		questionFrame.add(questionPanel);
+		questionFrame.pack();
+		questionFrame.setVisible(true);
 	}
 	
 	public void getCard()
 	{
-		Gauntlet_Cards card = launch.getCard();
-		System.out.println(card.getCatagory());
-		String message;
+		card = launch.getCard();
+		
 		if (card.getCatagory().equals("Mental"))
 		{
-			System.out.println("Executing mental case:");
-			message = card.getQuestion() + "\n" + card.getPoints() + " points";
-			System.out.println(message);
-			int choice = JOptionPane.showOptionDialog(new JFrame(), message, "Mental", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, threeOptions, threeOptions[2]);
-			
-			if (choice == JOptionPane.YES_OPTION)
-			{
-				JOptionPane.showMessageDialog(null, card.getAnswer());
-			}
-			
-			else if (choice == JOptionPane.YES_OPTION)
-			{
-				Player thePlayer = players.get(playerIndex);
-				int points = thePlayer.getPoints();
-				points = points + card.getPoints();
-				thePlayer.setPoints(points);
-				players.set(playerIndex, thePlayer);
-			}
+			buildQestionWindow();
 		}
 		else 
 		{
@@ -159,24 +138,60 @@ public class Gauntlet_GUI
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			
+			if (players.isEmpty())
+			{
+				JOptionPane.showMessageDialog(null, "No players!");
+			}
+			if (!players.isEmpty()) 
+			{
+				StringBuilder scores = new StringBuilder();
+				for (Player player : players) {
+					scores.append(player.toString());
+				}
+				String finalScores = scores.toString();
+				JOptionPane.showMessageDialog(null, finalScores);
+			}
 		}
 	}
 	
-	private class showPlayersButtonListener implements ActionListener
+	private class solvedButtonListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			if (players.isEmpty())
-				System.out.println("No players!");
-			else
-				for (Player player : players) 
-				{
-					System.out.println(player);
-				}
+			Player thePlayer = players.get(playerIndex);
+			int points = thePlayer.getPoints();
+			points = points + card.getPoints();
+			thePlayer.setPoints(points);
+			players.set(playerIndex, thePlayer);
+			questionFrame.dispose();
+			if ((playerIndex + 1) == players.size())
+				playerIndex = 0;
+			else 
+				playerIndex++;
 		}
 	}
 	
+	private class failButtonListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			questionFrame.dispose();
+			if ((playerIndex + 1) == players.size())
+				playerIndex = 0;
+			else 
+				playerIndex++;
+		}
+	}
+	
+	private class answerButtonListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			JOptionPane.showMessageDialog(null, card.getAnswer());
+		}
+	}
+	
+
 	private class addPlayerButtonListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)

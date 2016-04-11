@@ -50,4 +50,8 @@ public class Player implements Serializable
 		return points;
 	}
 	
+	public String toString()
+	{
+		return "\n" + userName + ": " + points + "\n"; 
+	}
 }
